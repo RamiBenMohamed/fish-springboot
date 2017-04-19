@@ -11,6 +11,8 @@ public class Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+		GetQueueUrlRequest rami= new GetQueueUrlRequest(MANAGER_QUEUE);
+		System.out.println(rami.toString());
 	}
 
 }
