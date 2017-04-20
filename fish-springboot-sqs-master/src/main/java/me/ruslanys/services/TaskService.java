@@ -1,5 +1,6 @@
 package me.ruslanys.services;
 
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -53,7 +54,12 @@ public class TaskService {
     @Async
     @SneakyThrows
     public void start(Task task) throws JmsException, JsonProcessingException {
-        jmsTemplate.convertAndSend(Application.PROCESSOR_QUEUE, mapper.writeValueAsString(task));
+        String jsonInString = mapper.writeValueAsString(task);
+        SendMessageRequest sendMessageRequest = new SendMessageRequest()
+                .withQueueUrl("")
+                .withMessageBody(jsonInString);
+
+       jmsTemplate.convertAndSend(sendMessageRequest);
     }
 
 }
