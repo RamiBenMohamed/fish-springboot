@@ -1,5 +1,6 @@
 package me.ruslanys.components;
 
+import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
@@ -18,6 +19,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
+
 import java.io.IOException;
 import java.util.Random;
 
@@ -70,7 +73,12 @@ public class TaskProcessor {
 
     @SneakyThrows
     private void sendEvent(Event event) throws JmsException, JsonProcessingException {
-        jmsTemplate.convertAndSend(Application.MANAGER_QUEUE, mapper.writeValueAsString(event));
+      	String jsonInString = mapper.writeValueAsString(event);
+        SendMessageRequest sendMessageRequest = new SendMessageRequest()
+                .withQueueUrl("")
+                .withMessageBody(jsonInString);
+
+       jmsTemplate.convertAndSend(sendMessageRequest);
     }
 
 }
