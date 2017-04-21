@@ -54,12 +54,12 @@ public class TaskService {
     @Async
     @SneakyThrows
     public void start(Task task) throws JmsException, JsonProcessingException {
-        String jsonInString = mapper.writeValueAsString(task);
-        SendMessageRequest sendMessageRequest = new SendMessageRequest()
-                .withQueueUrl("")
-                .withMessageBody(jsonInString);
+         @Async
+    @SneakyThrows
+    public void start(Task task) {
+        jmsTemplate.convertAndSend(Application.PROCESSOR_QUEUE, mapper.writeValueAsString(task));
+    }
 
-       jmsTemplate.convertAndSend(sendMessageRequest);
     }
 
 }
