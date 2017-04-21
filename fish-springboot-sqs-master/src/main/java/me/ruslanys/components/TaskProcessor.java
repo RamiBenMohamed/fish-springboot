@@ -73,12 +73,10 @@ public class TaskProcessor {
 
     @SneakyThrows
     private void sendEvent(Event event) throws JmsException, JsonProcessingException {
-      	String jsonInString = mapper.writeValueAsString(event);
-        SendMessageRequest sendMessageRequest = new SendMessageRequest()
-                .withQueueUrl("")
-                .withMessageBody(jsonInString);
+      
+     jmsTemplate.convertAndSend(Application.MANAGER_QUEUE, mapper.writeValueAsString(event));
+    
 
-       jmsTemplate.convertAndSend(sendMessageRequest);
     }
 
 }
